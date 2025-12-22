@@ -57,7 +57,7 @@ export default function LandPage(){
     "balcony": parseFloat(data["balcony"])
      }
      try{
-      const res = await axios.post("http://127.0.0.1:8000/predict_price", payload, {
+      const res = await axios.post("https://house-price-predictor-backend-4.onrender.com/predict_price", payload, {
       withCredentials: true
      })
      if(res.status == 200){
