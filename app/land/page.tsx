@@ -57,10 +57,9 @@ export default function LandPage(){
     "balcony": parseFloat(data["balcony"])
      }
      try{
-      const res = await axios.post(
-  "https://house-price-predictor-backend-4.onrender.com/predict_price",
-  payload
-)
+      const res = await axios.post("https://house-price-predictor-backend-4.onrender.com/predict_price", payload, {
+      withCredentials: true
+     })
      if(res.status == 200){
       console.log(res.data)
       setAmt(res.data["predicted_price"])
