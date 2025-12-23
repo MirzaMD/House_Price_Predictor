@@ -33,12 +33,12 @@ export function PriceDisplay({num, setPrice}:{num : string | number, setPrice: R
             </p>
             <button type="button"
             onClick = {()=>setPrice(false)}
-            className={`px-2 xm:px-4 text-md sm:text-xl rounded-md text-stone-50
-            bg-purple-600 cursor-pointer hover:bg-purple-800
+            className={`px-2 xm:px-4 text-md sm:text-xl rounded-md text-purple-900
+            bg-stone-100 cursor-pointer hover:bg-stone-300
             active:bg-purple-400 active:text-stone-800
-            border-2 border-blue-300 font-serif`}
+            border-2 border-blue-400 font-serif`}
             style={{boxShadow: `5px 5px 5px black`}}>
-                Go Back
+                Try again
             </button>
         </motion.div>
     )

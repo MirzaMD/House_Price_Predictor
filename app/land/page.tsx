@@ -13,6 +13,7 @@ import { FaWandMagicSparkles } from 'react-icons/fa6'
 import axios from 'axios'
 import { useCallback, useState } from 'react'
 import { PriceDisplay } from '../components/price'
+import { Loading } from '../components/loader'
 const schema = z.object({
   area_type: z.string(),
   availability: z.string(),
@@ -31,7 +32,8 @@ export default function LandPage(){
    
   const route = useRouter() 
   const [showPrice, setShowPrice] = useState<boolean>(false)
-  const [ amt, setAmt ] = useState<string>("")   
+  const [ amt, setAmt ] = useState<string>("")
+  const [ startLoading, setStartLoading ] = useState<boolean>(false)   
   const slidingFromLeft: Variants ={
     start:{
       y: 120 
@@ -47,7 +49,8 @@ export default function LandPage(){
     }
   }
   const submitting = useCallback(async (data: Tschema)=>{
-     const payload = {
+     setStartLoading(true) 
+    const payload = {
       "area_type": parseFloat(data["area_type"]),
     "availability": parseFloat(data["availability"]),
     "location": data["location"],
@@ -61,6 +64,7 @@ export default function LandPage(){
       withCredentials: true
      })
      if(res.status == 200){
+      setStartLoading(false)
       console.log(res.data)
       setAmt(res.data["predicted_price"])
       setShowPrice(true)
@@ -70,8 +74,10 @@ export default function LandPage(){
      catch(err){
       if (axios.isAxiosError(err)) {
     console.log("ERROR:", err.response?.data || err.message);
+    setStartLoading(false)
   } else {
     console.log("UNKNOWN ERROR:", err);
+    setStartLoading(false)
   }
      }
   }, [])
@@ -103,7 +109,10 @@ export default function LandPage(){
      {!showPrice?
      (
       <div className={`w-full mt-38 flex flex-col justify-center items-center gap-y-6`}>
-      <DropDown name="Area Type" reg = {register("area_type")} />
+       {!startLoading?
+       (
+        <>
+        <DropDown name="Area Type" reg = {register("area_type")} />
       { errors.area_type && (
         <p className={`text-sm sm:text-xl font-mono font-bold text-red-800`}
         >{`${errors.area_type.message}`}</p>
@@ -138,6 +147,13 @@ export default function LandPage(){
         <p className={`text-sm sm:text-xl font-mono font-bold text-red-800`}
         >{`${errors.balcony.message}`}</p>
       )}
+        </>
+       ):
+       (
+        <Loading/>
+       )
+      } 
+      
      </div>
      )
     :
@@ -150,24 +166,23 @@ export default function LandPage(){
       items-center border-purple-600 border-t-2
       bg-linear-to-br from-purple-300 via-purple-200 to-purple-400`}
      >
-      <button type="button" onClick={()=>{ route.push("/")}}
-      className={`bg-[whitesmoke] rounded-md px-1 sm:px-2 
-        hover:cursor-pointer ml-10 active:bg-[gray]`}
+      <button type="button" 
+      disabled={startLoading}
+      onClick={()=>{ route.push("/")}}
+      className={`bg-[whitesmoke] rounded-md px-2 sm:px-3 
+        hover:cursor-pointer ml-10 active:bg-[gray] font-serif`}
       style={{boxShadow: `2px 2px 2px #710071`}}
       >
-       <HiArrowCircleLeft className={`text-xl sm:text-5xl text-purple-500 
-        hover:text-[#15f4ee] font-extrabold`} />      
+       GO BACK     
       </button>
       <button type="submit"
       disabled={isSubmitting}
-      className={`bg-[whitesmoke] rounded-md px-1 
-      sm:px-2 hover:cursor-pointer
-      mr-10 active:bg-[gray]`}
+      className={`bg-[whitesmoke] rounded-md px-2 
+      sm:px-3 hover:cursor-pointer
+      mr-10 active:bg-[gray] font-serif`}
       style={{boxShadow: `2px 2px 2px #7B68EE`}}
       >
-        <FaWandMagicSparkles className={`text-xl sm:text-5xl text-purple-500 
-        hover:text-[#FF00BF] font-extrabold`} 
-        />   
+        PREDICT   
       </button>
      </motion.div>
     </form>
