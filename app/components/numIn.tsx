@@ -1,37 +1,67 @@
+"use client"
 import { UseFormRegisterReturn } from "react-hook-form";
-import { motion, Variants, easeIn } from "framer-motion"
+import { motion, Variants, easeIn } from "framer-motion";
 
-export function NumInp({title, reg, bhk}: {title: string, reg: UseFormRegisterReturn, bhk?: string}){
-    
-     const slideFromLeft: Variants = {
-        start:{
-            x: 40,
-            opacity: 0
-        },
-        stop: {
-            x:0,
-            opacity: [0.2, 0.4, 0.6, 0.8, 1],
-            transition:{
-                ease: easeIn,
-                duration: 0.8
-            }
-        }
-    }    
-    return(
-        <motion.div
-        variants={slideFromLeft}
-        initial="start"
-        animate="stop"
-        className="w-full flex flex-col justify-center items-center gap-x-4 mt-2"
-        >
-            <label 
-            className="text-sm sm:text-2xl text-[#5836bf] font-serif font-semibold"
-            >{bhk? `${title} (${bhk})`: title}:</label>
-            <input type="number" {...reg} 
-            className={`w-[90%] rounded-md border-2 border-purple-500 text-md sm:text-xl
-                font-mono font-bold text-purple-900`}
-            placeholder = {`Enter the ${title}`}    
-            />
-        </motion.div>
-    )
+export function NumInp({
+  title,
+  reg,
+  bhk
+}: {
+  title: string,
+  reg: UseFormRegisterReturn,
+  bhk?: string
+}) {
+
+  const slideFromLeft: Variants = {
+    start: {
+      x: 60,
+      opacity: 0
+    },
+    stop: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        ease: easeIn,
+        duration: 0.6
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      variants={slideFromLeft}
+      initial="start"
+      animate="stop"
+      className="w-full flex flex-col items-center gap-y-4 mt-4"
+    >
+      {/* Label */}
+      <label className="text-lg sm:text-2xl text-purple-700 font-serif font-semibold tracking-wide">
+        {bhk ? `${title} (${bhk})` : title}
+      </label>
+
+      {/* Input */}
+      <input
+        type="number"
+        {...reg}
+        placeholder={`Enter the ${title}`}
+        className="
+          w-[90%] sm:w-[70%]
+          px-4 py-2 sm:px-6 sm:py-3
+          rounded-xl
+          bg-linear-to-br from-white to-purple-50
+          text-purple-900 font-semibold font-mono
+          border border-purple-300
+          shadow-md
+
+          focus:outline-none
+          focus:ring-2 focus:ring-purple-400
+          focus:shadow-lg
+
+          placeholder:text-purple-400
+
+          transition-all duration-200
+        "
+      />
+    </motion.div>
+  );
 }

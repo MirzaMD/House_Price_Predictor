@@ -1,51 +1,74 @@
 "use client"
 import { UseFormRegisterReturn } from "react-hook-form"
 import { motion, Variants, easeIn } from "framer-motion"
-export function DropDown({name, reg}: {name: string, reg: UseFormRegisterReturn}){
-    const area_map ={
-    'Super built-up  Area': 4,
-    'Built-up  Area': 3,
-    'Plot  Area': 2,
-    'Carpet  Area': 1
-    }
-    
-    const slideFromLeft: Variants = {
-        start:{
-            x: -100,
-            opacity: 0
-        },
-        stop: {
-            x:0,
-            opacity: [0.2, 0.4, 0.6, 0.8, 1],
-            transition:{
-                ease: easeIn,
-                duration: 0.8
-            }
-        }
-    } 
 
-    return(
-      <motion.div 
-        variants={slideFromLeft}
-        initial="start"
-        animate="stop"
-        className="w-full flex justify-center items-center gap-x-4 mt-2">
-        <label 
-        className="text-sm sm:text-2xl text-[#5836bf] font-serif font-semibold"
-        >{name}:</label>
-        <select {...reg}
-        className="sm:p-2 text-sm sm:text-xl font-bold font-serif bg-purple-600
-        text-[whitesmoke] cursor-pointer rounded-lg border-2 border-stone-50">
-            {Object.entries(area_map).map(([label, value])=>(
-                <option 
-                key={value}
-                value={value}
-                className={"hover:text-xl hover:bg-white hover:text-purple-700"}
-                >
-                    {label}
-                </option>
-            ))}
-        </select>
-      </motion.div>
-    )
+export function DropDown({
+  name,
+  reg
+}: {
+  name: string,
+  reg: UseFormRegisterReturn
+}) {
+  const area_map = [
+    'Super built-up Area',
+    'Built-up Area',
+    'Plot Area',
+    'Carpet Area'
+  ]
+
+  const slideFromLeft: Variants = {
+    start: {
+      x: -80,
+      opacity: 0
+    },
+    stop: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        ease: easeIn,
+        duration: 0.6
+      }
+    }
+  }
+
+  return (
+    <motion.div
+      variants={slideFromLeft}
+      initial="start"
+      animate="stop"
+      className="w-full flex flex-col items-center gap-y-4 mt-4"
+    >
+      {/* Label */}
+      <label className="text-lg sm:text-2xl text-purple-700 font-serif font-semibold tracking-wide">
+        {name}
+      </label>
+
+      {/* Select */}
+      <select
+        {...reg}
+        className="
+          w-[85%] sm:w-[60%]
+          px-4 py-2 sm:px-6 sm:py-3
+          rounded-xl
+          bg-linear-to-br from-purple-600 to-indigo-500
+          text-white font-semibold
+          shadow-md
+          border border-purple-300
+          focus:outline-none focus:ring-2 focus:ring-purple-400
+          hover:scale-105 transition-all duration-200
+          cursor-pointer
+        "
+      >
+        {area_map.map((label) => (
+          <option
+            key={label}
+            value={label}
+            className="text-black bg-white"
+          >
+            {label}
+          </option>
+        ))}
+      </select>
+    </motion.div>
+  )
 }

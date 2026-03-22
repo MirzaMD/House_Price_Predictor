@@ -1,9 +1,16 @@
-import { UseFormRegisterReturn } from "react-hook-form";
-import { motion, Variants, easeIn } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-export function Avail({title, reg}:{title:string, reg: UseFormRegisterReturn}){
-   const months = {
-    "Ready To Move": 0,
+import { UseFormSetValue } from "react-hook-form";
+
+export function Avail({
+  title,
+  setValue
+}: {
+  title: string;
+  setValue: UseFormSetValue<any>;
+}) {
+  const months = {
+    "Ready To Move": 13,
     "January": 1,
     "February": 2,
     "March": 3,
@@ -16,75 +23,91 @@ export function Avail({title, reg}:{title:string, reg: UseFormRegisterReturn}){
     "October": 10,
     "November": 11,
     "December": 12
-};
-const [aval, setAval] = useState<number>(0)
-const [mon, setMon] = useState<number>(0)
-const [year, setYear] = useState<number>(0)
-useEffect(()=>{
-    if(mon == 0){
-        setYear(0)
-    }
-    setAval((year*100) + mon) 
-}, [mon, year])
-useEffect(()=>{
-},[aval, mon, year])
-    const slideFromLeft: Variants = {
-        start:{
-            x: -100,
-            opacity: 0
-        },
-        stop: {
-            x:0,
-            opacity: [0.2, 0.4, 0.6, 0.8, 1],
-            transition:{
-                ease: easeIn,
-                duration: 0.8
+  };
+
+  const [mon, setMon] = useState<number>(0);
+  const [year, setYear] = useState<number>(20);
+
+  useEffect(() => {
+    if (mon === 13) setYear(25);
+
+    const value = mon === 13 ? 13 : year * 12 + mon;
+    setValue("availability", value, { shouldValidate: true });
+  }, [mon, year, setValue]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="w-full flex flex-col items-center gap-y-5 mt-4"
+    >
+      {/* Label */}
+      <label className="text-lg sm:text-2xl text-purple-700 font-serif font-semibold tracking-wide">
+        {title}
+      </label>
+
+      {/* Container */}
+      <div className="flex gap-4 sm:gap-6">
+        
+        {/* Month Select */}
+        <select
+          onChange={(e) => setMon(Number(e.target.value))}
+          className="
+            px-4 py-2 sm:px-6 sm:py-3
+            rounded-xl
+            bg-linear-to-br from-purple-700 to-purple-400
+            text-white font-semibold
+            shadow-md
+            border border-purple-300
+            focus:outline-none focus:ring-2 focus:ring-purple-400
+            hover:scale-105 transition-all duration-200
+            cursor-pointer
+          "
+        >
+          {Object.entries(months).map(([key, value]) => (
+            <option
+              key={value}
+              value={value}
+              className="text-black bg-white"
+            >
+              {key}
+            </option>
+          ))}
+        </select>
+
+        {/* Year Select */}
+        <select
+          onChange={(e) => setYear(Number(e.target.value))}
+          disabled={mon === 13}
+          className={`
+            px-4 py-2 sm:px-6 sm:py-3
+            rounded-xl
+            font-semibold
+            shadow-md
+            border
+            focus:outline-none focus:ring-2
+            transition-all duration-200
+            cursor-pointer
+            ${
+              mon === 13
+                ? "bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed"
+                : "bg-linear-to-br from-purple-700 to-purple-400 text-white border-indigo-300 hover:scale-105 focus:ring-indigo-400"
             }
-        }
-    } 
-    return(
-        <motion.div
-         variants={slideFromLeft}
-        initial="start"
-        animate="stop"
-        className="w-full flex flex-col justify-center items-center gap-y-4 mt-2"
-        >  
-            <label 
-            className="text-sm sm:text-2xl text-[#5836bf] font-serif font-semibold"
-            >{title}:</label>
-            <input type="number" value={aval} hidden {...reg}/>
-            <div className={`w-full flex justify-evenly items-center`}>
-            <select
-            onChange={(e)=>setMon(Number(e.target.value))}
-            className="sm:p-2 text-sm sm:text-xl font-bold font-serif bg-purple-600
-            text-[whitesmoke] cursor-pointer rounded-lg border-2 border-stone-50"
-            >
-             {Object.entries(months).map(([key, value])=>(
-                <option key = {value}
-                value = {value}
-                className={"hover:text-xl hover:bg-white hover:text-purple-700"}
-                > 
-                {key}
-                </option>
-             ))}
-            </select>
-            <select
-            onChange={(e)=>setYear(Number(e.target.value))}
-            disabled={mon == 0}
-            className="sm:p-2 text-sm sm:text-xl font-bold font-mono bg-purple-600
-            text-[whitesmoke] cursor-pointer rounded-lg border-2 border-stone-50"
-            >
-                {[0, 19, 20, 21, 22,23, 24, 25].map((val, idx)=>(
-                    <option
-                    key={idx}
-                    value={val}
-                    className={"hover:text-xl hover:bg-white hover:text-purple-700 font-mono"}
-                    >
-                    {mon !== 0?val:0}
-                    </option>
-                ))}
-            </select>
-            </div>
-        </motion.div>
-    )
+          `}
+        >
+          {[25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15].map((val) => (
+            <option key={val} value={val} className="text-black bg-white">
+              20{val}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Helper text */}
+      <p className="text-xs sm:text-sm text-gray-500 font-mono">
+        Select possession month & year
+      </p>
+    </motion.div>
+  );
 }
