@@ -160,7 +160,7 @@ export default function LandPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2 rounded-lg from-purple-700 to-indigo-600 hover:bg-purple-700
+          className="px-6 py-2 rounded-lg bg-purple-700 hover:bg-purple-500
           text-white font-semibold shadow-lg active:scale-95 transition cursor-pointer"
         >
           {isSubmitting ? "Predicting..." : "Predict"}
